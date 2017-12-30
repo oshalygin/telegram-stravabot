@@ -20,3 +20,7 @@
 
 # Distribution folder
 dist/
+
+
+# app.yaml which contains sensitive environment variables
+/app.yaml
