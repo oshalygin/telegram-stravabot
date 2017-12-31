@@ -3,9 +3,21 @@ package main
 import (
 	"log"
 
+	"fmt"
+
+	"net/http"
+
 	"github.com/oshalygin/telegram-stravabot/utilities"
 	"gopkg.in/telegram-bot-api.v4"
 )
+
+func handleHealthCheck(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "ok")
+}
+
+func handle(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello World @ %v", r.URL.Path)
+}
 
 func main() {
 	configuration := utilities.GetConfiguration()
@@ -18,13 +30,23 @@ func main() {
 	bot.Debug = true
 	log.Printf("Authorized Account: %s", bot.Self.UserName)
 
-	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
+	response, err := bot.SetWebhook(tgbotapi.NewWebhook("https://www.groklet.com/" + bot.Token))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	updates, err := bot.GetUpdatesChan(u)
+	fmt.Println(response)
+
+	info, _ := bot.GetWebhookInfo()
+	fmt.Println(info)
+	http.HandleFunc("/", handle)
+	http.HandleFunc("/_ah/health", handleHealthCheck)
+	updates := bot.ListenForWebhook("/" + bot.Token)
+
+	go http.ListenAndServe(":8080", nil)
 
 	if err != nil {
-		log.Println(err)
+		fmt.Println(err)
 	}
 
 	for update := range updates {
@@ -39,4 +61,5 @@ func main() {
 		bot.Send(message)
 
 	}
+
 }
