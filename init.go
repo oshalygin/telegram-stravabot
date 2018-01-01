@@ -10,9 +10,7 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
-var bot *tgbotapi.BotAPI
-
-func initBot(debug bool) {
+func initBot(debug bool) *tgbotapi.BotAPI {
 	configuration := utilities.GetConfiguration()
 	bot, err := tgbotapi.NewBotAPI(configuration.TelegramBotAPIKey)
 
@@ -23,16 +21,17 @@ func initBot(debug bool) {
 	bot.Debug = debug
 	log.Printf("Authorized Account: %s", bot.Self.UserName)
 
+	return bot
 }
 
 // InitWebhookConnection initializes a connection to the Telegram BotAPI and polls
 // on an interval
 
-func InitWebhookConnection() *tgbotapi.BotAPI {
+func InitWebhookConnection() (*tgbotapi.BotAPI, tgbotapi.UpdatesChannel) {
 	configuration := utilities.GetConfiguration()
 	const debug = false
 
-	initBot(debug)
+	bot := initBot(debug)
 
 	response, err := bot.SetWebhook(tgbotapi.NewWebhook(configuration.WebhookDomain + bot.Token))
 	if err != nil {
@@ -46,29 +45,19 @@ func InitWebhookConnection() *tgbotapi.BotAPI {
 
 	updates := bot.ListenForWebhook("/" + bot.Token)
 
-	for update := range updates {
-		if update.Message == nil {
-			continue
-		}
-
-		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-		message := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
-		message.ReplyToMessageID = update.Message.MessageID
-
-		bot.Send(message)
-
-	}
-
-	return bot
+	return bot, updates
 }
 
 // InitPollingConnection initializes a connection to the Telegram BotAPI and polls
 // on an interval
-func InitPollingConnnection() *tgbotapi.BotAPI {
+func InitPollingConnection() (*tgbotapi.BotAPI, tgbotapi.UpdatesChannel) {
 	const debug = true
 	const timeout = 60
 
-	initBot(debug)
+	bot := initBot(debug)
+
+	// Remove the webhook if it exists
+	bot.RemoveWebhook()
 
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = timeout
@@ -79,20 +68,19 @@ func InitPollingConnnection() *tgbotapi.BotAPI {
 		log.Panic(err)
 	}
 
-	for update := range updates {
-		if update.Message == nil {
-			continue
-		}
+	return bot, updates
+}
 
-		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
-		msg.ReplyToMessageID = update.Message.MessageID
-
-		bot.Send(msg)
+// InitConnection will initialize the connection and determine if the
+// webhook connection should be initialized or the polling connection
+// based on the environment variable, environment
+func InitConnection() (*tgbotapi.BotAPI, tgbotapi.UpdatesChannel) {
+	configuration := utilities.GetConfiguration()
+	if configuration.Environment == "production" {
+		return InitWebhookConnection()
+	} else {
+		return InitPollingConnection()
 	}
-
-	return bot
 }
 
 // HandleHealthCheck is a handler which responds back with ok at the healthcheck route
