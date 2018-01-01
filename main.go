@@ -37,10 +37,6 @@ func main() {
 
 	go http.ListenAndServe(":8080", nil)
 
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	for update := range updates {
 		if update.Message == nil {
 			continue
