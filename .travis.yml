@@ -17,8 +17,3 @@ before_install:
 script:
   - go vet ./...
   - golint -set_exit_status .
-
-after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-      echo "TODO: Build out GCP deployment"
-    fi
