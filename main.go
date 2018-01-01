@@ -11,14 +11,6 @@ import (
 	"gopkg.in/telegram-bot-api.v4"
 )
 
-func handleHealthCheck(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "ok")
-}
-
-func handle(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World @ %v", r.URL.Path)
-}
-
 func main() {
 	configuration := utilities.GetConfiguration()
 
@@ -39,8 +31,8 @@ func main() {
 
 	info, _ := bot.GetWebhookInfo()
 	fmt.Println(info)
-	http.HandleFunc("/", handle)
-	http.HandleFunc("/_ah/health", handleHealthCheck)
+	http.HandleFunc("/", HandleRoot)
+	http.HandleFunc("/_ah/health", HandleHealthCheck)
 	updates := bot.ListenForWebhook("/" + bot.Token)
 
 	go http.ListenAndServe(":8080", nil)
