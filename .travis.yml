@@ -9,11 +9,10 @@ branches:
     - master
 
 before_install:
-- go get -u github.com/golang/dep/cmd/dep
+- bash ./.travis.d/update-dependencies.sh;
 - go get -u github.com/golang/lint/golint
 
 script:
-  - dep ensure
   - go vet ./...
   - golint -set_exit_status .
 
