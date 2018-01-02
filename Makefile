@@ -32,6 +32,6 @@ remove_current_gcloud_dir:
 	- rm -rf ${HOME}/google-cloud-sdk
 
 install_gcloud_sdk: remove_current_gcloud_dir
-	- curl $(gcloud_sdk) | bash
+	- curl $(gcloud_sdk) | bash | yes
 
 .PHONY: lint go-lint dep-install build install_gcloud_sdk remove_current_gcloud_dir
