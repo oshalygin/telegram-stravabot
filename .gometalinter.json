@@ -1,6 +1,7 @@
 {
   "Enable": [
     "vet",
+    "golint",
     "interfacer"
   ]
 }

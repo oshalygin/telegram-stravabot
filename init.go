@@ -26,7 +26,6 @@ func initBot(debug bool) *tgbotapi.BotAPI {
 
 // InitWebhookConnection initializes a connection to the Telegram BotAPI and polls
 // on an interval
-
 func InitWebhookConnection() (*tgbotapi.BotAPI, tgbotapi.UpdatesChannel) {
 	configuration := utilities.GetConfiguration()
 	const debug = false
@@ -78,9 +77,9 @@ func InitConnection() (*tgbotapi.BotAPI, tgbotapi.UpdatesChannel) {
 	configuration := utilities.GetConfiguration()
 	if configuration.Environment == "production" {
 		return InitWebhookConnection()
-	} else {
-		return InitPollingConnection()
 	}
+
+	return InitPollingConnection()
 }
 
 // HandleHealthCheck is a handler which responds back with ok at the healthcheck route
