@@ -22,4 +22,4 @@ wget $base_path/$utility_version/$utility_binary \
 # Update access permissions of the utility
 chmod +x $dep
 
-sudo $dep ensure
+$dep ensure
