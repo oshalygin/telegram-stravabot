@@ -22,5 +22,8 @@ script:
   - make lint
 
 after_success:
+  # TODO: Bundle this into a single script
   - make install_gcloud_sdk
   - make gcloud_auth
+  - make build
+  - make deploy

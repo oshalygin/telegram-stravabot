@@ -37,4 +37,7 @@ install_gcloud_sdk: remove_current_gcloud_dir
 gcloud_auth:
 	- gcloud auth activate-service-account --key-file sa_credentials.json
 
-.PHONY: lint go-lint dep-install build install_gcloud_sdk remove_current_gcloud_dir
+deploy:
+	- gcloud -q app deploy ./app.yaml --promote --stop-previous-version
+
+.PHONY: lint go-lint dep-install build install_gcloud_sdk remove_current_gcloud_dir deploy gcloud_auth
