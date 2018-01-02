@@ -13,5 +13,5 @@ before_install:
 - go get -u github.com/golang/lint/golint
 
 script:
-  - go vet ./...
+  - make lint
   - golint -set_exit_status .
