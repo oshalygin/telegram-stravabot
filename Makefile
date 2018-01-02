@@ -34,4 +34,7 @@ remove_current_gcloud_dir:
 install_gcloud_sdk: remove_current_gcloud_dir
 	- curl $(gcloud_sdk) | bash
 
+gcloud_auth:
+	- gcloud auth activate-service-account --key-file sa_credentials.json
+
 .PHONY: lint go-lint dep-install build install_gcloud_sdk remove_current_gcloud_dir

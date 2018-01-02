@@ -22,3 +22,4 @@ script:
 
 after_success:
   - make install_gcloud_sdk
+  - make gcloud_auth
