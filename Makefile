@@ -27,8 +27,10 @@ lint: go-lint
 build:
 	- CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
-install_gcloud_sdk:
+remove_current_gcloud_dir:
 	- rm -rf ${HOME}/google-cloud-sdk
+
+install_gcloud_sdk: remove_current_gcloud_dir
   	- echo "deb $(gcloud_deb_repo) $(cloud_sdk_repo) main" | sudo tee -a $(gcloud_src_list)
 	- curl $(gcloud_gpg) | sudo apt-key add -
 	- sudo apt-get update && sudo apt-get install google-cloud-sdk=$(gcloud_sdk_version)
