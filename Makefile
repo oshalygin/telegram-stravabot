@@ -35,6 +35,8 @@ install_gcloud_sdk: remove_current_gcloud_dir
 	- curl $(gcloud_sdk) | bash
 
 gcloud_auth:
+	- gcloud config set compute/zone $(gcloud_zone)
+	- gcloud config set project $(gcloud_project)
 	- gcloud auth activate-service-account --key-file sa_credentials.json
 
 deploy:
