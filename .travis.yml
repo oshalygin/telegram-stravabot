@@ -1,15 +1,20 @@
+sudo: required
+
+services:
+  - docker
 language: go
 go:
-  - 1.9
+  - 1.9.2
 
-# Don't build other branches that are being used for PRs.
-# Currently only the master branch is used in this repo.
 branches:
   only:
     - master
 
 before_install:
-- make dep-install
+  - make dep-install
 
 script:
   - make lint
+
+after_success:
+  - make install_gcloud_sdk
