@@ -10,8 +10,6 @@ branches:
 
 before_install:
 - make dep-install
-- go get -u github.com/golang/lint/golint
 
 script:
   - make lint
-  - golint -set_exit_status .

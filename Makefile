@@ -10,7 +10,11 @@ dep-install:
 	- chmod +x $(dep)
 	- $(dep) ensure
 
-lint:
+go-lint:
+	- go get -u github.com/golang/lint/golint
+	- golint -set_exit_status .
+
+lint: go-lint
 	go vet ./...
 
-.PHONY: lint dep-install
+.PHONY: lint go-lint dep-install
