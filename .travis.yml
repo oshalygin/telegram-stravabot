@@ -14,7 +14,8 @@ branches:
     - master
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_6e6de08e0ca3_key -iv $encrypted_6e6de08e0ca3_iv -in sa_credentials.json.enc -out ./sa_credentials.json -d
+  - openssl aes-256-cbc -K $encrypted_6e6de08e0ca3_key -iv $encrypted_6e6de08e0ca3_iv -in secrets.tar.enc -out ./secrets.tar -d
+  - tar xvf secrets.tar
   - make dep-install
 
 script:
