@@ -1,4 +1,4 @@
-pwd 				=	 $(shell pwd)
+pwd 				=	$(shell pwd)
 base_path			=	"https://github.com/golang/dep/releases/download"
 utility_version		=	"v0.3.2"
 utility_version		=	"v0.3.2"
