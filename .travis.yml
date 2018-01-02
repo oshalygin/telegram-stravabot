@@ -9,7 +9,7 @@ branches:
     - master
 
 before_install:
-- bash ./.travis.d/install-dependencies.sh;
+- make dep-install
 - go get -u github.com/golang/lint/golint
 
 script:
