@@ -2,6 +2,7 @@ package utilities
 
 import "os"
 
+// Configuration is a struct that describes all of the application configuration values
 type Configuration struct {
 	TelegramBotAPIKey string
 	WebhookDomain     string
